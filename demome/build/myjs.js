@@ -1,9 +1,24 @@
+// var arr = [{name:"明明",gender:"男"},{name:"红红",gender:"女"},{name:"强强",gender:"男"}];
+// for (var i = arr.length - 1; i >= 0; i--) {
+//   alert(arr[i].name);
+//   alert(arr[i].gender);
+// }
+
+
 //table头行元素
 var Tableth = React.createClass({displayName: "Tableth",
+  getInitialState :function(){
+    return{
+      val: "myval"
+    };
+  },
+  thhandleClick: function(event){
+    this.readOnly = "false";
+  },
   render: function() {
     return (
-      React.createElement("th", null, 
-        this.props.name
+      React.createElement("th", {onClick: this.thhandleClick}, 
+        React.createElement("input", {type: "text", value: this.state.val, readOnly: "true"})
       )
     );
   }
@@ -14,7 +29,7 @@ var Tabletd = React.createClass({displayName: "Tabletd",
   render: function() {
     return (
       React.createElement("td", null, 
-        this.props.name
+        React.createElement("input", {type: "text", value: this.props.name, readOnly: "true"})
       )
     );
   }
@@ -123,7 +138,7 @@ var Button = React.createClass({displayName: "Button",
     return (
       React.createElement("div", null, 
         React.createElement("button", {onClick: this.handleClick}, "新增")
-      )   
+      )
     );
   }
 });

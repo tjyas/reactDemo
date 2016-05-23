@@ -1,9 +1,24 @@
+// var arr = [{name:"明明",gender:"男"},{name:"红红",gender:"女"},{name:"强强",gender:"男"}];
+// for (var i = arr.length - 1; i >= 0; i--) {
+//   alert(arr[i].name);
+//   alert(arr[i].gender);
+// }
+
+
 //table头行元素
 var Tableth = React.createClass({
+  getInitialState :function(){
+    return{
+      val: "myval"
+    };
+  },
+  thhandleClick: function(event){
+    this.readOnly = "false";
+  },
   render: function() {
     return (
-      <th>
-        {this.props.name}
+      <th onClick={this.thhandleClick}>
+        <input type="text" value={this.state.val} readOnly="true"/>
       </th>
     );
   }
@@ -14,7 +29,7 @@ var Tabletd = React.createClass({
   render: function() {
     return (
       <td>
-        {this.props.name}
+        <input type="text" value={this.props.name} readOnly="true"/>
       </td>
     );
   }
@@ -123,7 +138,7 @@ var Button = React.createClass({
     return (
       <div>
         <button onClick={this.handleClick}>新增</button>
-      </div>   
+      </div>
     );
   }
 });
