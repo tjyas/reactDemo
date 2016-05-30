@@ -155,7 +155,17 @@ var Container = React.createClass({displayName: "Container",
   }
 });
 
+var CONTENTS = [
+  {name:'小强',gender:'男',del:'删除',chg:'修改'},
+  {name:'小红',gender:'女',del:'删除',chg:'修改'},
+  {name:'哈哈',gender:'男',del:'删除',chg:'修改'}
+];
+
 ReactDOM.render(
   React.createElement(Container, null),
   document.getElementById('container')
 );
+
+
+
+
