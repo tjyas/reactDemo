@@ -8,31 +8,25 @@ var ProductTable = React.createClass({displayName: "ProductTable",
         var me = this;
 
         // 获取姓名和性别
-        var name = document.getElementById('nameinput').value;
-        var gender = document.getElementById('genderinput').value;        
+        var name = me.refs.nameinput.value;
+        var gender = me.refs.genderinput.value;      
         var newobj = {name:name,gender:gender};
-
-        CONTENTS.push(newobj);
-        console.log(CONTENTS);
+        me.state.products.push(newobj);
 
         // 出发渲染
-        this.setState({products: CONTENTS});
+        me.setState(me.state.products);
     },
-    deleteHandle: function(){
-        console.log(111);
-        CONTENTS.splice(key,1);
-        this.setState({products: CONTENTS});
+    deleteHandle: function(me,key){
+        var me = this;
+        console.log(key);
+        me.state.products.splice(key,1);
+        this.setState(me.state.products);
     },
-    changeHandle: function(){
-        console.log(222);
-        var name = document.getElementById('nameinput').value;
-        var gender = document.getElementById('genderinput').value;        
-        var newobj = {name:name,gender:gender};
-
-        CONTENTS[key].name = newobj.name;
-        CONTENTS[key].gender = newobj.gender;
-
-        this.setState({products: CONTENTS});
+    changeHandle: function(me,key){
+        var me = this;
+        me.state.products[1].name = me.refs.nameinput.value;
+        me.state.products[1].gender = me.refs.genderinput.value;
+        this.setState(me.state.products);
     },
     render: function() {
         var me = this,
@@ -55,8 +49,8 @@ var ProductTable = React.createClass({displayName: "ProductTable",
                                     React.createElement("tr", {key: key}, 
                                         React.createElement("td", null, val.name), 
                                         React.createElement("td", null, val.gender), 
-                                        React.createElement("td", null, React.createElement("button", {onClick: this.deleteHandle}, "删除")), 
-                                        React.createElement("td", null, React.createElement("button", {onClick: this.changeHandle}, "修改"))
+                                        React.createElement("td", null, React.createElement("button", {onClick: me.deleteHandle.bind(me,key)}, "删除")), 
+                                        React.createElement("td", null, React.createElement("button", {onClick: me.changeHandle.bind(me,key)}, "修改"))
                                     )
                                 );
                             })
@@ -64,8 +58,8 @@ var ProductTable = React.createClass({displayName: "ProductTable",
                     )
                 ), 
                 React.createElement("div", null, 
-                    React.createElement("input", {type: "text", id: "nameinput", placeholder: "请输入姓名"}), 
-                    React.createElement("input", {type: "text", id: "genderinput", placeholder: "请输入性别"}), 
+                    React.createElement("input", {type: "text", ref: "nameinput", placeholder: "请输入姓名"}), 
+                    React.createElement("input", {type: "text", ref: "genderinput", placeholder: "请输入性别"}), 
                     React.createElement("button", {onClick: this.addHandle}, "新增")
                 )
             )
