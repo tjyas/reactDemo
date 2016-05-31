@@ -1,8 +1,8 @@
-var gkey = -1;
 var ProductTable = React.createClass({displayName: "ProductTable",
     getInitialState: function(){
         return {
-            products: this.props.products
+            products: this.props.products,
+            key: null
         };
     },
     addHandle: function(){
@@ -12,8 +12,15 @@ var ProductTable = React.createClass({displayName: "ProductTable",
         var name = me.refs.nameinput.value;
         var gender = me.refs.genderinput.value;      
         var newobj = {name:name,gender:gender};
-        me.state.products.push(newobj);
-
+        var key = me.state.key;
+        if(key==null){
+            me.state.products.push(newobj);
+        }else{
+            me.state.products[key].name = newobj.name;
+            me.state.products[key].gender = newobj.gender;
+            key = null;
+        }
+        
         // 渲染
         me.setState(me.state.products);
     },
@@ -27,15 +34,9 @@ var ProductTable = React.createClass({displayName: "ProductTable",
         var me = this;
         me.refs.nameinput.value = me.state.products[key].name;
         me.refs.genderinput.value = me.state.products[key].gender;
-        gkey = key;
+        me.state.key = key;
     },
-    yesHandle: function(){
-        var me = this;
-        me.state.products[gkey].name = me.refs.nameinput.value;
-        me.state.products[gkey].gender = me.refs.genderinput.value;
-        gkey = -1;
-        this.setState(me.state.products);
-    },
+
     render: function() {
         var me = this,
             state = me.state;
@@ -68,9 +69,8 @@ var ProductTable = React.createClass({displayName: "ProductTable",
                 React.createElement("div", null, 
                     React.createElement("input", {type: "text", ref: "nameinput", placeholder: "请输入姓名"}), 
                     React.createElement("input", {type: "text", ref: "genderinput", placeholder: "请输入性别"}), 
-                    React.createElement("button", {onClick: this.addHandle}, "新增"), 
-                    React.createElement("button", {onClick: this.yesHandle}, "确定"), 
-                    React.createElement("p", null, "特别说明：修改时，先点击对应字段的修改，修改好之后点击确定/(ㄒoㄒ)/~~")
+                    React.createElement("button", {onClick: this.addHandle}, "我是按钮"), 
+                    React.createElement("p", null, "特别说明：修改时，先点击对应字段的修改，修改好之后点击确定")
                 )
             )
         );
