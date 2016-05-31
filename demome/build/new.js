@@ -1,78 +1,77 @@
-var rows=[];
-
-var ProductRow = React.createClass({displayName: "ProductRow",
-  render: function() {
-    return (
-      React.createElement("tr", null, 
-        React.createElement("td", null, this.props.product.name), 
-        React.createElement("td", null, this.props.product.gender), 
-        React.createElement("td", null, React.createElement("a", null, "删除")), 
-        React.createElement("td", null, React.createElement("a", null, "修改"))
-      )
-    );
-  }
-});
-
 var ProductTable = React.createClass({displayName: "ProductTable",
-  render: function() {
-    // var rows = [];
-    this.props.products.forEach(function(product) {
-      rows.push(React.createElement(ProductRow, {product: product, key: product.name}));
-    });
-    console.log(CONTENTS);
-    return (
-      React.createElement("table", null, 
-        React.createElement("thead", null, 
-          React.createElement("tr", null, 
-            React.createElement("th", null, "姓名"), 
-            React.createElement("th", null, "性别"), 
-            React.createElement("th", null, "删除"), 
-            React.createElement("th", null, "修改")
-          )
-        ), 
-        React.createElement("tbody", null, rows)
-      )
-    );
-  }
-});
+    getInitialState: function(){
+        return {
+            products: this.props.products
+        };
+    },
+    addHandle: function(){
+        var me = this;
 
-var Button = React.createClass({displayName: "Button",
-  handleClick: function() {
-    var name = document.getElementById('nameinput').value;
-    var gender = document.getElementById('genderinput').value;
-    var newrow = {
-      name:name,
-      gender:gender
-    };
-    CONTENTS.push(newrow);
-    console.log(CONTENTS);
-    ReactDOM.render(
-      React.createElement(FilterableProductTable, {products: CONTENTS}),
-      document.getElementById('container')
-    );
-  },
-  render: function() {
-    return (
-      React.createElement("div", null, 
-        React.createElement("button", {onClick: this.handleClick}, "新增")
-      )
-    );
-  }
-});
+        // 获取姓名和性别
+        var name = document.getElementById('nameinput').value;
+        var gender = document.getElementById('genderinput').value;        
+        var newobj = {name:name,gender:gender};
 
-var FilterableProductTable = React.createClass({displayName: "FilterableProductTable",
-  render: function() {
-    return (
-      React.createElement("div", null, 
-        React.createElement(ProductTable, {products: this.props.products}), 
-        React.createElement("input", {type: "text", id: "nameinput", placeholder: "请输入姓名"}), 
-        React.createElement("input", {type: "text", id: "genderinput", placeholder: "请输入性别"}), 
-        React.createElement(Button, null)
-      )
-    );
-  }
-});
+        CONTENTS.push(newobj);
+        console.log(CONTENTS);
 
+        // 出发渲染
+        this.setState({products: CONTENTS});
+    },
+    deleteHandle: function(){
+        console.log(111);
+        CONTENTS.splice(key,1);
+        this.setState({products: CONTENTS});
+    },
+    changeHandle: function(){
+        console.log(222);
+        var name = document.getElementById('nameinput').value;
+        var gender = document.getElementById('genderinput').value;        
+        var newobj = {name:name,gender:gender};
+
+        CONTENTS[key].name = newobj.name;
+        CONTENTS[key].gender = newobj.gender;
+
+        this.setState({products: CONTENTS});
+    },
+    render: function() {
+        var me = this,
+            state = me.state;
+        return (
+            React.createElement("div", null, 
+                React.createElement("table", null, 
+                    React.createElement("thead", null, 
+                        React.createElement("tr", null, 
+                            React.createElement("th", null, "姓名"), 
+                            React.createElement("th", null, "性别"), 
+                            React.createElement("th", null, "删除"), 
+                            React.createElement("th", null, "修改")
+                        )
+                    ), 
+                    React.createElement("tbody", null, 
+                           
+                            state.products.map(function(val, key){
+                                return (
+                                    React.createElement("tr", {key: key}, 
+                                        React.createElement("td", null, val.name), 
+                                        React.createElement("td", null, val.gender), 
+                                        React.createElement("td", null, React.createElement("button", {onClick: this.deleteHandle}, "删除")), 
+                                        React.createElement("td", null, React.createElement("button", {onClick: this.changeHandle}, "修改"))
+                                    )
+                                );
+                            })
+                        
+                    )
+                ), 
+                React.createElement("div", null, 
+                    React.createElement("input", {type: "text", id: "nameinput", placeholder: "请输入姓名"}), 
+                    React.createElement("input", {type: "text", id: "genderinput", placeholder: "请输入性别"}), 
+                    React.createElement("button", {onClick: this.addHandle}, "新增")
+                )
+            )
+        );
+    }
+});
 
 var CONTENTS = [
   {name:'小强',gender:'男'},
@@ -81,6 +80,6 @@ var CONTENTS = [
 ];
  
 ReactDOM.render(
-  React.createElement(FilterableProductTable, {products: CONTENTS}),
+  React.createElement(ProductTable, {products: CONTENTS}),
   document.getElementById('container')
 );

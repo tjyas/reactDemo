@@ -1,78 +1,77 @@
-var rows=[];
-
-var ProductRow = React.createClass({
-  render: function() {
-    return (
-      <tr>
-        <td>{this.props.product.name}</td>
-        <td>{this.props.product.gender}</td>
-        <td><a>删除</a></td>
-        <td><a>修改</a></td>
-      </tr>
-    );
-  }
-});
-
 var ProductTable = React.createClass({
-  render: function() {
-    // var rows = [];
-    this.props.products.forEach(function(product) {
-      rows.push(<ProductRow product={product} key={product.name}/>);
-    });
-    console.log(CONTENTS);
-    return (
-      <table>
-        <thead>
-          <tr>
-            <th>姓名</th>
-            <th>性别</th>
-            <th>删除</th>
-            <th>修改</th>
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-      </table>
-    );
-  }
-});
+    getInitialState: function(){
+        return {
+            products: this.props.products
+        };
+    },
+    addHandle: function(){
+        var me = this;
 
-var Button = React.createClass({
-  handleClick: function() {
-    var name = document.getElementById('nameinput').value;
-    var gender = document.getElementById('genderinput').value;
-    var newrow = {
-      name:name,
-      gender:gender
-    };
-    CONTENTS.push(newrow);
-    console.log(CONTENTS);
-    ReactDOM.render(
-      <FilterableProductTable products={CONTENTS}/>,
-      document.getElementById('container')
-    );
-  },
-  render: function() {
-    return (
-      <div>
-        <button onClick={this.handleClick}>新增</button>
-      </div>
-    );
-  }
-});
+        // 获取姓名和性别
+        var name = document.getElementById('nameinput').value;
+        var gender = document.getElementById('genderinput').value;        
+        var newobj = {name:name,gender:gender};
 
-var FilterableProductTable = React.createClass({
-  render: function() {
-    return (
-      <div>
-        <ProductTable products={this.props.products} />
-        <input type="text" id="nameinput" placeholder="请输入姓名" />
-        <input type="text" id="genderinput" placeholder="请输入性别"/>
-        <Button/>
-      </div>
-    );
-  }
-});
+        CONTENTS.push(newobj);
+        console.log(CONTENTS);
 
+        // 出发渲染
+        this.setState({products: CONTENTS});
+    },
+    deleteHandle: function(){
+        console.log(111);
+        CONTENTS.splice(key,1);
+        this.setState({products: CONTENTS});
+    },
+    changeHandle: function(){
+        console.log(222);
+        var name = document.getElementById('nameinput').value;
+        var gender = document.getElementById('genderinput').value;        
+        var newobj = {name:name,gender:gender};
+
+        CONTENTS[key].name = newobj.name;
+        CONTENTS[key].gender = newobj.gender;
+
+        this.setState({products: CONTENTS});
+    },
+    render: function() {
+        var me = this,
+            state = me.state;
+        return (
+            <div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>姓名</th>
+                            <th>性别</th>
+                            <th>删除</th>
+                            <th>修改</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {   
+                            state.products.map(function(val, key){
+                                return (
+                                    <tr key={key}>
+                                        <td>{val.name}</td>
+                                        <td>{val.gender}</td>
+                                        <td><button onClick={this.deleteHandle}>删除</button></td>
+                                        <td><button onClick={this.changeHandle}>修改</button></td>
+                                    </tr>
+                                );
+                            })
+                        }
+                    </tbody>
+                </table>
+                <div>
+                    <input type="text" id="nameinput" placeholder="请输入姓名" />
+                    <input type="text" id="genderinput" placeholder="请输入性别"/>
+                    <button onClick={this.addHandle}>新增</button>
+                </div>
+            </div>
+        );
+    }
+});
 
 var CONTENTS = [
   {name:'小强',gender:'男'},
@@ -81,6 +80,6 @@ var CONTENTS = [
 ];
  
 ReactDOM.render(
-  <FilterableProductTable products={CONTENTS} />,
+  <ProductTable products={CONTENTS} />,
   document.getElementById('container')
 );
