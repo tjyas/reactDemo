@@ -69,8 +69,7 @@ var ProductTable = React.createClass({
                 <div>
                     <input type="text" ref="nameinput" placeholder="请输入姓名" />
                     <input type="text" ref="genderinput" placeholder="请输入性别"/>
-                    <button onClick={this.addHandle}>我是按钮</button>
-                    <p>特别说明：修改时，先点击对应字段的修改，修改好之后点击确定</p>
+                    <button onClick={this.addHandle}>按我</button>
                 </div>
             </div>
         );
