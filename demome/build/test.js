@@ -208,13 +208,12 @@ componentWillReceiveProps(object nextProps)：已加载组件收到新的参数�
 shouldComponentUpdate(object nextProps, object nextState)：组件判断是否重新渲染时调用*/
 
 
-var Hello = React.createClass({displayName: "Hello",
+/*var Hello = React.createClass({
   getInitialState: function () {
     return {
       opacity: 1.0
     };
   },
-
   componentDidMount: function () {
     this.timer = setInterval(function () {
       var opacity = this.state.opacity;
@@ -227,17 +226,113 @@ var Hello = React.createClass({displayName: "Hello",
       });
     }.bind(this), 100);
   },
-
   render: function () {
     return (
-      React.createElement("div", {style: {opacity: this.state.opacity}}, 
-        "Hello ", this.props.name
-      )
+      <div style={{opacity: this.state.opacity}}>
+        Hello {this.props.name}
+      </div>
     );
   }
 });
-
 ReactDOM.render(
-  React.createElement(Hello, {name: "world"}),
+  <Hello name="world"/>,
   document.body
-);
+);*/
+
+
+
+/*ReactDOM.render(
+	<div name="miao">haha</div>,
+	document.getElementById('example')
+);*/
+
+
+//计时
+/*var Timer = React.createClass({
+	getInitialState: function() {
+		return {secondsElapsed: 0};
+	},
+	tick: function() {
+		this.setState({secondsElapsed: this.state.secondsElapsed + 1});
+	},
+	componentDidMount: function() {
+		this.interval = setInterval(this.tick, 1000);
+	},
+	componentWillUnmount: function() {
+		clearInterval(this.interval);
+	},
+	render: function() {
+		return (
+			<div>Seconds Elapsed: {this.state.secondsElapsed}</div>
+		);
+	}
+});
+ReactDOM.render(<Timer />, document.getElementById('secdClock'));*/
+
+//todoList
+/*var TodoList = React.createClass({
+	render: function() {
+		var createItem = function(itemText) {
+			return <li>{itemText}</li>;
+		};
+		return <ul>{this.props.items.map(createItem)}</ul>;
+	}
+});
+var TodoApp = React.createClass({
+	getInitialState: function() {
+		return {items: [], text: ''};
+	},
+	onChange: function(e) {
+		this.setState({text: e.target.value});
+	},
+	handleSubmit: function(e) {
+		e.preventDefault();
+		var nextItems = this.state.items.concat([this.state.text]);
+		var nextText = '';
+		this.setState({items: nextItems, text: nextText});
+	},
+	render: function() {
+		return (
+			<div>
+				<h3>TODO</h3>
+				<TodoList items={this.state.items} />
+				<form onSubmit={this.handleSubmit}>
+					<input onChange={this.onChange} value={this.state.text} />
+					<button>{'Add #' + (this.state.items.length + 1)}</button>
+				</form>
+			</div>
+		);
+	}
+});
+ReactDOM.render(<TodoApp />, document.getElementById('example'));*/
+
+
+var converter = new Showdown.converter();
+var MarkdownEditor = React.createClass({displayName: "MarkdownEditor",
+	getInitialState: function() {
+		return {value: 'Type some *markdown* here!'};
+	},
+	handleChange: function() {
+		this.setState({value: this.refs.textarea.getDOMNode().value});
+	},
+	render: function() {
+		return (
+			React.createElement("div", {className: "MarkdownEditor"}, 
+			React.createElement("h3", null, "Input"), 
+			React.createElement("textarea", {
+			onChange: this.handleChange, 
+			ref: "textarea", 
+			defaultValue: this.state.value}), 
+			React.createElement("h3", null, "Output"), 
+			React.createElement("div", {
+				className: "content", 
+				dangerouslySetInnerHTML: {
+					__html: converter.makeHtml(this.state.value)
+				}}
+			)
+			)
+		);
+	}
+});
+ReactDOM.render(React.createElement(MarkdownEditor, null), document.getElementById('example'));
+
