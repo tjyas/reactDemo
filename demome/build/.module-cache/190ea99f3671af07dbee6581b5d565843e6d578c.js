@@ -18,7 +18,7 @@ var ProductTable = React.createClass({displayName: "ProductTable",
         }else{
             me.state.products[key].name = newobj.name;
             me.state.products[key].gender = newobj.gender;
-            key = null;
+            me.state.key = null;
         }
         
         // 渲染
